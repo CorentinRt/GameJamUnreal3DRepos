@@ -34,6 +34,8 @@ void APropHuntCharacterPlayer::BeginPlay()
 void APropHuntCharacterPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	HandleRandomMovement(DeltaTime);
 }
 
 // Called to bind functionality to input
@@ -67,9 +69,11 @@ void APropHuntCharacterPlayer::LookAction(FVector2D LookDir)
 {
 	if (PropHuntPlayerController == nullptr) return;
 
-	float PitchValue = LookDir.Y * GetWorld()->DeltaTimeSeconds * 100.f;
+	float DeltaTime = GetWorld()->DeltaTimeSeconds;
+	
+	float PitchValue = LookDir.Y * DeltaTime * 100.f;
 
-	float YawValue = LookDir.X * GetWorld()->DeltaTimeSeconds * 100.f;
+	float YawValue = LookDir.X * DeltaTime * 100.f;
 	
 	AddActorLocalRotation(FRotator(0.f, YawValue, 0.f), true);
 
@@ -87,21 +91,67 @@ void APropHuntCharacterPlayer::CatchAction(float CatchValue)
 
 void APropHuntCharacterPlayer::JumpAction(float JumpValue)
 {
-	GEngine->AddOnScreenDebugMessage(
-			-1,
-			3.f,
-			FColor::Red,
-			TEXT("TriggerJump")
-		);
 	if (GetCharacterMovement()->IsMovingOnGround())
 	{
-		GEngine->AddOnScreenDebugMessage(
-		-1,
-		3.f,
-		FColor::Red,
-		TEXT("JumpAction")
-	);
 		Jump();
+	}
+}
+
+void APropHuntCharacterPlayer::HandleRandomMovement(float DeltaTime)
+{
+	if (IsMovingRandomly == false) return;
+	
+	if (CurrentTimeBeforeChange <= 0.f)
+	{
+		ChangeRandomDirection();
+
+		CurrentTimeBeforeChange = TimeBeforeRandomDirChange;
+	}
+	else
+	{
+		CurrentTimeBeforeChange -= DeltaTime;
+	}
+	
+	CurrentRandomMovementDir.X = FMath::FInterpTo(CurrentRandomMovementDir.X, TargetRandomMovementDir.X, DeltaTime, 1.f);
+	CurrentRandomMovementDir.Y = FMath::FInterpTo(CurrentRandomMovementDir.Y, TargetRandomMovementDir.Y, DeltaTime, 1.f);
+
+	GEngine->AddOnScreenDebugMessage(
+				-1,
+				3.f,
+				FColor::Purple,
+				FString::Printf(TEXT("Player Movement: %f"), CurrentRandomMovementDir.X)
+			);
+	
+	GetCharacterMovement()->AddInputVector(FVector(CurrentRandomMovementDir.X, CurrentRandomMovementDir.Y, 0.f) * MaxRandomStrenght);
+}
+
+void APropHuntCharacterPlayer::ChangeRandomDirection()
+{
+	GEngine->AddOnScreenDebugMessage(
+				-1,
+				3.f,
+				FColor::Red,
+				TEXT("ChangeRandomDirection")
+			);
+	
+	float XRandomTarget = FMath::FRandRange(-1.f , 1.f);
+	float YRandomTarget = FMath::FRandRange(-1.f , 1.f);
+
+	TargetRandomMovementDir.X = XRandomTarget;
+	TargetRandomMovementDir.Y = YRandomTarget;
+
+	TargetRandomMovementDir.Normalize();
+}
+
+void APropHuntCharacterPlayer::SetCharacterRandomMovement(bool IsRandom)
+{
+	IsMovingRandomly = IsRandom;
+
+	if (IsMovingRandomly == false)
+	{
+		CurrentRandomMovementDir = FVector2D(0.f, 0.f);
+
+		CurrentTimeBeforeChange = 0.f;
 	}
 }
 

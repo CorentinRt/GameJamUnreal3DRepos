@@ -63,5 +63,36 @@ private:
 	UFUNCTION()
 	void JumpAction(float JumpValue);
 
+#pragma endregion
+
+#pragma region RandomMovements
+private:
+	UPROPERTY()
+	bool IsMovingRandomly = false;
+
+	UPROPERTY()
+	FVector2D TargetRandomMovementDir;
+	UPROPERTY()
+	FVector2D CurrentRandomMovementDir;
+
+	UPROPERTY(EditAnywhere)
+	float MaxRandomStrenght = 2.f;
+
+	UPROPERTY(EditAnywhere)
+	float TimeBeforeRandomDirChange = 0.3f;
+
+	UPROPERTY()
+	float CurrentTimeBeforeChange = 0.f;
+	
+	UFUNCTION()
+	void HandleRandomMovement(float DeltaTime);
+
+	UFUNCTION()
+	void ChangeRandomDirection();
+	
+public:
+	UFUNCTION(BlueprintCallable)
+	void SetCharacterRandomMovement(bool IsRandom);
+
 #pragma endregion 
 };
