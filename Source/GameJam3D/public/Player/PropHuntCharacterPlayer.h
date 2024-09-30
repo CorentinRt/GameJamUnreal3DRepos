@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "PropHuntCharacterPlayer.generated.h"
 
+class UCameraComponent;
 class APropHuntPlayerController;
 
 UCLASS()
@@ -17,6 +18,10 @@ public:
 	// Sets default values for this character's properties
 	APropHuntCharacterPlayer();
 
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<UCameraComponent> CameraComponent;
+	
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -3,6 +3,7 @@
 
 #include "GameJam3D/Public/Player/PropHuntCharacterPlayer.h"
 
+#include "Camera/CameraComponent.h"
 #include "GameJam3D/public/PlayerController/PropHuntPlayerController.h"
 
 
@@ -11,6 +12,10 @@ APropHuntCharacterPlayer::APropHuntCharacterPlayer()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraPlayer"));
+
+	CameraComponent->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -52,13 +57,6 @@ void APropHuntCharacterPlayer::SetPlayerController()
 
 void APropHuntCharacterPlayer::MoveAction(FVector2D MoveDir)
 {
-	GEngine->AddOnScreenDebugMessage(
-		-1,
-		3.f,
-		FColor::Red,
-		TEXT("Move")
-	);
-	
 	AddMovementInput(GetActorForwardVector() * MoveDir.Y + GetActorRightVector() * MoveDir.X);
 }
 
@@ -70,5 +68,19 @@ void APropHuntCharacterPlayer::LookAction(FVector2D LookDir)
 		FColor::Red,
 		TEXT("Look")
 	);
+
+	if (PropHuntPlayerController == nullptr) return;
+
+	float PitchValue = LookDir.Y * GetWorld()->DeltaTimeSeconds * 100.f;
+
+	float YawValue = LookDir.X * GetWorld()->DeltaTimeSeconds * 100.f;
+	
+	AddActorLocalRotation(FRotator(0.f, YawValue, 0.f), true);
+
+	if (CameraComponent == nullptr) return;
+
+	CameraComponent->AddLocalRotation(FRotator(PitchValue, 0.f, 0.f), true);
+	
+	FMath::Clamp(CameraComponent->GetRelativeRotation().Yaw, -70.f, 70.f);
 }
 

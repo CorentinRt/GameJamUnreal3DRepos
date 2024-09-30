@@ -35,13 +35,18 @@ void APropHuntPlayerController::SetupInputComponent()
 
 	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent);
 
+	if (EnhancedInputComponent == nullptr) return;
+
+	BindMoveInput(EnhancedInputComponent);
+	BindLookInput(EnhancedInputComponent);
+	BindCatchInput(EnhancedInputComponent);
 	
 }
 
 void APropHuntPlayerController::MoveAction(const FInputActionValue& InputActionValue)
 {
 	FVector2D MoveValue = InputActionValue.Get<FVector2D>();
-
+	
 	OnInputMoveAction.Broadcast(MoveValue);
 }
 
@@ -91,13 +96,13 @@ void APropHuntPlayerController::BindLookInput(UEnhancedInputComponent* EnhancedI
 		&APropHuntPlayerController::LookAction
 	);
 	EnhancedInputComponent->BindAction(
-		MoveInputAction,
+		LookInputAction,
 		ETriggerEvent::Triggered,
 		this,
 		&APropHuntPlayerController::LookAction
 	);
 	EnhancedInputComponent->BindAction(
-		MoveInputAction,
+		LookInputAction,
 		ETriggerEvent::Completed,
 		this,
 	&APropHuntPlayerController::LookAction
