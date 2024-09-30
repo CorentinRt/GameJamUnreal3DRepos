@@ -40,10 +40,10 @@ void APropHuntPlayerController::SetupInputComponent()
 	BindMoveInput(EnhancedInputComponent);
 	BindLookInput(EnhancedInputComponent);
 	BindCatchInput(EnhancedInputComponent);
-	
+	BindJumpAction(EnhancedInputComponent);
 }
 
-void APropHuntPlayerController::MoveAction(const FInputActionValue& InputActionValue)
+void APropHuntPlayerController::MoveReceiveInput(const FInputActionValue& InputActionValue)
 {
 	FVector2D MoveValue = InputActionValue.Get<FVector2D>();
 	
@@ -60,23 +60,23 @@ void APropHuntPlayerController::BindMoveInput(UEnhancedInputComponent* EnhancedI
 		MoveInputAction,
 		ETriggerEvent::Started,
 		this,
-		&APropHuntPlayerController::MoveAction
+		&APropHuntPlayerController::MoveReceiveInput
 	);
 	EnhancedInputComponent->BindAction(
 		MoveInputAction,
 		ETriggerEvent::Triggered,
 		this,
-		&APropHuntPlayerController::MoveAction
+		&APropHuntPlayerController::MoveReceiveInput
 	);
 	EnhancedInputComponent->BindAction(
 		MoveInputAction,
 		ETriggerEvent::Completed,
 		this,
-		&APropHuntPlayerController::MoveAction
+		&APropHuntPlayerController::MoveReceiveInput
 	);
 }
 
-void APropHuntPlayerController::LookAction(const FInputActionValue& InputActionValue)
+void APropHuntPlayerController::LookReceiveInput(const FInputActionValue& InputActionValue)
 {
 	FVector2D LookValue = InputActionValue.Get<FVector2D>();
 
@@ -93,23 +93,23 @@ void APropHuntPlayerController::BindLookInput(UEnhancedInputComponent* EnhancedI
 		LookInputAction,
 		ETriggerEvent::Started,
 		this,
-		&APropHuntPlayerController::LookAction
+		&APropHuntPlayerController::LookReceiveInput
 	);
 	EnhancedInputComponent->BindAction(
 		LookInputAction,
 		ETriggerEvent::Triggered,
 		this,
-		&APropHuntPlayerController::LookAction
+		&APropHuntPlayerController::LookReceiveInput
 	);
 	EnhancedInputComponent->BindAction(
 		LookInputAction,
 		ETriggerEvent::Completed,
 		this,
-	&APropHuntPlayerController::LookAction
+	&APropHuntPlayerController::LookReceiveInput
 	);
 }
 
-void APropHuntPlayerController::CatchAction(const FInputActionValue& InputActionValue)
+void APropHuntPlayerController::CatchReceiveInput(const FInputActionValue& InputActionValue)
 {
 	float CatchValue = InputActionValue.Get<float>();
 
@@ -126,6 +126,27 @@ void APropHuntPlayerController::BindCatchInput(UEnhancedInputComponent* Enhanced
 		CatchInputAction,
 		ETriggerEvent::Started,
 		this,
-		&APropHuntPlayerController::CatchAction
+		&APropHuntPlayerController::CatchReceiveInput
+	);
+}
+
+void APropHuntPlayerController::JumpReceiveInput(const FInputActionValue& InputActionValue)
+{
+	float JumpValue = InputActionValue.Get<float>();
+
+	OnInputJumpAction.Broadcast(JumpValue);
+}
+
+void APropHuntPlayerController::BindJumpAction(UEnhancedInputComponent* EnhancedInputComponent)
+{
+	if (EnhancedInputComponent == nullptr) return;
+
+	if (JumpInputAction == nullptr) return;
+	
+	EnhancedInputComponent->BindAction(
+		JumpInputAction,
+		ETriggerEvent::Started,
+		this,
+		&APropHuntPlayerController::JumpReceiveInput
 	);
 }

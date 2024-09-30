@@ -43,6 +43,7 @@ public:
 	UPROPERTY()
 	APropHuntPlayerController* PropHuntPlayerController;
 
+#pragma region Actions
 private:
 	UFUNCTION()
 	void MoveAction(FVector2D MoveDir);
@@ -54,7 +55,13 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void CatchActionBlueprint(float CatchValue);
 
-
+private:
 	UFUNCTION()
 	void CatchAction(float CatchValue);
+
+	
+	UFUNCTION()
+	void JumpAction(float JumpValue);
+
+#pragma endregion 
 };

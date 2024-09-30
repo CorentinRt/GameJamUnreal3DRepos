@@ -4,6 +4,7 @@
 #include "GameJam3D/Public/Player/PropHuntCharacterPlayer.h"
 
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameJam3D/public/PlayerController/PropHuntPlayerController.h"
 
 
@@ -48,6 +49,7 @@ void APropHuntCharacterPlayer::BindReceiveInputFromController() const
 	PropHuntPlayerController->OnInputMoveAction.AddDynamic(this, &APropHuntCharacterPlayer::MoveAction);
 	PropHuntPlayerController->OnInputLookAction.AddDynamic(this, &APropHuntCharacterPlayer::LookAction);
 	PropHuntPlayerController->OnInputCatchAction.AddDynamic(this, &APropHuntCharacterPlayer::CatchAction);
+	PropHuntPlayerController->OnInputJumpAction.AddDynamic(this, &APropHuntCharacterPlayer::JumpAction);
 	
 }
 
@@ -63,13 +65,6 @@ void APropHuntCharacterPlayer::MoveAction(FVector2D MoveDir)
 
 void APropHuntCharacterPlayer::LookAction(FVector2D LookDir)
 {
-	GEngine->AddOnScreenDebugMessage(
-		-1,
-		3.f,
-		FColor::Red,
-		TEXT("Look")
-	);
-
 	if (PropHuntPlayerController == nullptr) return;
 
 	float PitchValue = LookDir.Y * GetWorld()->DeltaTimeSeconds * 100.f;
@@ -88,5 +83,25 @@ void APropHuntCharacterPlayer::LookAction(FVector2D LookDir)
 void APropHuntCharacterPlayer::CatchAction(float CatchValue)
 {
 	CatchActionBlueprint(CatchValue);
+}
+
+void APropHuntCharacterPlayer::JumpAction(float JumpValue)
+{
+	GEngine->AddOnScreenDebugMessage(
+			-1,
+			3.f,
+			FColor::Red,
+			TEXT("TriggerJump")
+		);
+	if (GetCharacterMovement()->IsMovingOnGround())
+	{
+		GEngine->AddOnScreenDebugMessage(
+		-1,
+		3.f,
+		FColor::Red,
+		TEXT("JumpAction")
+	);
+		Jump();
+	}
 }
 

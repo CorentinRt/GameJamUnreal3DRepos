@@ -32,6 +32,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputAction> CatchInputAction;
 
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UInputAction> JumpInputAction;
+
 protected:
 	virtual void BeginPlay() override;
 	
@@ -44,24 +47,40 @@ public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInputMoveAction, FVector2D, InputMoveValue);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInputLookAction, FVector2D, InputLookValue);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInputCatchAction, float, InputCatchValue);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInputJumpAction, float, InputJumpValue);
 
 	FOnInputMoveAction OnInputMoveAction;
 	FOnInputLookAction OnInputLookAction;
 	FOnInputCatchAction OnInputCatchAction;
-
+	FOnInputJumpAction OnInputJumpAction;
 	
 private:
-	void MoveAction(const FInputActionValue& InputActionValue);
+#pragma region MoveInput
+	void MoveReceiveInput(const FInputActionValue& InputActionValue);
 	UFUNCTION()
 	void BindMoveInput(UEnhancedInputComponent* EnhancedInputComponent);
+	
+#pragma endregion
 
-	void LookAction(const FInputActionValue& InputActionValue);
+#pragma region LookInput
+	void LookReceiveInput(const FInputActionValue& InputActionValue);
 	UFUNCTION()
 	void BindLookInput(UEnhancedInputComponent* EnhancedInputComponent);
-
-
-	void CatchAction(const FInputActionValue& InputActionValue);
+	
+#pragma endregion
+	
+#pragma region CatchInput
+	void CatchReceiveInput(const FInputActionValue& InputActionValue);
 	UFUNCTION()
 	void BindCatchInput(UEnhancedInputComponent* EnhancedInputComponent);
+
+#pragma endregion
+
+#pragma region JumpInput
+	void JumpReceiveInput(const FInputActionValue& InputActionValue);
+	UFUNCTION()
+	void BindJumpAction(UEnhancedInputComponent* EnhancedInputComponent);
+	
+#pragma endregion
 	
 };
