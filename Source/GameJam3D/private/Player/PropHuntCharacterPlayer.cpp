@@ -47,6 +47,7 @@ void APropHuntCharacterPlayer::BindReceiveInputFromController() const
 	
 	PropHuntPlayerController->OnInputMoveAction.AddDynamic(this, &APropHuntCharacterPlayer::MoveAction);
 	PropHuntPlayerController->OnInputLookAction.AddDynamic(this, &APropHuntCharacterPlayer::LookAction);
+	PropHuntPlayerController->OnInputCatchAction.AddDynamic(this, &APropHuntCharacterPlayer::CatchAction);
 	
 }
 
@@ -82,5 +83,10 @@ void APropHuntCharacterPlayer::LookAction(FVector2D LookDir)
 	CameraComponent->AddLocalRotation(FRotator(PitchValue, 0.f, 0.f), true);
 	
 	FMath::Clamp(CameraComponent->GetRelativeRotation().Yaw, -70.f, 70.f);
+}
+
+void APropHuntCharacterPlayer::CatchAction(float CatchValue)
+{
+	CatchActionBlueprint(CatchValue);
 }
 

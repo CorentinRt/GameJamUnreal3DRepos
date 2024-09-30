@@ -49,5 +49,12 @@ private:
 
 	UFUNCTION()
 	void LookAction(FVector2D LookDir);
-	
+
+public:
+	UFUNCTION(BlueprintImplementableEvent)
+	void CatchActionBlueprint(float CatchValue);
+
+
+	UFUNCTION()
+	void CatchAction(float CatchValue);
 };
