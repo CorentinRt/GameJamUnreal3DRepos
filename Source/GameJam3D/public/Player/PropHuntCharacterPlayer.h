@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "PropHuntCharacterPlayer.generated.h"
 
+class APropHuntPlayerController;
+
 UCLASS()
 class GAMEJAM3D_API APropHuntCharacterPlayer : public ACharacter
 {
@@ -25,4 +27,22 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	
+	UFUNCTION()
+	void BindReceiveInputFromController() const;
+
+	UFUNCTION()
+	void SetPlayerController();
+	
+	UPROPERTY()
+	APropHuntPlayerController* PropHuntPlayerController;
+
+private:
+	UFUNCTION()
+	void MoveAction(FVector2D MoveDir);
+
+	UFUNCTION()
+	void LookAction(FVector2D LookDir);
+	
 };
