@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class GAMEJAM3D_API UPropHuntCharacterDataAsset : public UDataAsset
 {
 	GENERATED_BODY()
