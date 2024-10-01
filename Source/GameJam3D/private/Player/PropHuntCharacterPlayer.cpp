@@ -184,7 +184,7 @@ void APropHuntCharacterPlayer::ChangeRandomDirection()
 void APropHuntCharacterPlayer::SetCharacterRandomMovement(bool IsRandom)
 {
 	IsMovingRandomly = IsRandom;
-
+	
 	if (IsMovingRandomly == false)
 	{
 		CurrentRandomMovementDir = FVector2D(0.f, 0.f);
