@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "PropHuntCharacterPlayer.generated.h"
 
+class UPropHuntCharacterDataAsset;
 class UCameraComponent;
 class APropHuntPlayerController;
 
@@ -43,6 +44,13 @@ public:
 	UPROPERTY()
 	APropHuntPlayerController* PropHuntPlayerController;
 
+
+	UFUNCTION()
+	void SetupParameters();
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UPropHuntCharacterDataAsset> PropHuntCharacterDataAsset;
+	
 #pragma region Actions
 private:
 	UFUNCTION()
@@ -58,9 +66,6 @@ public:
 private:
 	UFUNCTION()
 	void CatchAction(float CatchValue);
-
-	UPROPERTY(EditAnywhere)
-	float CatchForce = 10.f;
 	
 	UPROPERTY()
 	bool CanCatch = true;
@@ -91,7 +96,7 @@ private:
 	FVector2D CurrentRandomMovementDir;
 
 	UPROPERTY(EditAnywhere)
-	float MaxRandomStrenght = 3.f;
+	float MaxRandomMoveStrenght = 3.f;
 
 	UPROPERTY(EditAnywhere)
 	float TimeBeforeRandomDirChange = 0.3f;

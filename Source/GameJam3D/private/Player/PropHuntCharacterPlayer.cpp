@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameJam3D/public/PlayerController/PropHuntPlayerController.h"
+#include "Player/PropHuntCharacterDataAsset.h"
 
 
 // Sets default values
@@ -60,6 +61,21 @@ void APropHuntCharacterPlayer::BindReceiveInputFromController() const
 void APropHuntCharacterPlayer::SetPlayerController()
 {
 	PropHuntPlayerController = Cast<APropHuntPlayerController>(Controller);
+}
+
+void APropHuntCharacterPlayer::SetupParameters()
+{
+	if (PropHuntCharacterDataAsset == nullptr) return;
+
+
+	// Catch parameters Setup
+	CatchCooldown = PropHuntCharacterDataAsset->CatchCooldown;
+
+
+	// RandomMoveParameters Setup
+	MaxRandomMoveStrenght = PropHuntCharacterDataAsset->MaxRandomMoveStrenght;
+	TimeBeforeRandomDirChange = PropHuntCharacterDataAsset->TimeBeforeRandomDirChange;
+	
 }
 
 void APropHuntCharacterPlayer::MoveAction(FVector2D MoveDir)
@@ -143,7 +159,7 @@ void APropHuntCharacterPlayer::HandleRandomMovement(float DeltaTime)
 				FString::Printf(TEXT("Player Movement: %f"), CurrentRandomMovementDir.X)
 			);
 	
-	GetCharacterMovement()->AddInputVector(FVector(CurrentRandomMovementDir.X, CurrentRandomMovementDir.Y, 0.f) * MaxRandomStrenght);
+	GetCharacterMovement()->AddInputVector(FVector(CurrentRandomMovementDir.X, CurrentRandomMovementDir.Y, 0.f) * MaxRandomMoveStrenght);
 }
 
 void APropHuntCharacterPlayer::ChangeRandomDirection()
