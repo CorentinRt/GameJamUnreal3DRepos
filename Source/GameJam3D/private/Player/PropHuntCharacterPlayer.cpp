@@ -28,7 +28,8 @@ void APropHuntCharacterPlayer::BeginPlay()
 	SetPlayerController();
 
 	BindReceiveInputFromController();
-	
+
+	SetupParameters();
 }
 
 // Called every frame
