@@ -35,6 +35,13 @@ public:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputAction> JumpInputAction;
 
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UInputMappingContext> QTEInputMappingContext;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UInputAction> QTEInputAction;
+
 protected:
 	virtual void BeginPlay() override;
 	
@@ -80,7 +87,25 @@ private:
 	void JumpReceiveInput(const FInputActionValue& InputActionValue);
 	UFUNCTION()
 	void BindJumpAction(UEnhancedInputComponent* EnhancedInputComponent);
-	
+
 #pragma endregion
+
+
+public:
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInputQTEAction, float, QTEValue);
+
+	FInputQTEAction OnInputQTEAction;
+
+	void QTEReceiveInput(const FInputActionValue& InputActionValue);
+	
+	UFUNCTION()
+	void BindQTEInputAction(UEnhancedInputComponent* EnhancedInputComponent);
+	
+	UFUNCTION(BlueprintCallable)
+	void ChangeInputMappingContextToQTE();
+
+	UFUNCTION(BlueprintCallable)
+	void ChangeInputMappingContextToDefault();
 	
 };

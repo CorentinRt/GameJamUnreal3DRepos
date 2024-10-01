@@ -41,6 +41,8 @@ void APropHuntPlayerController::SetupInputComponent()
 	BindLookInput(EnhancedInputComponent);
 	BindCatchInput(EnhancedInputComponent);
 	BindJumpAction(EnhancedInputComponent);
+
+	BindQTEInputAction(EnhancedInputComponent);
 }
 
 void APropHuntPlayerController::MoveReceiveInput(const FInputActionValue& InputActionValue)
@@ -149,4 +151,61 @@ void APropHuntPlayerController::BindJumpAction(UEnhancedInputComponent* Enhanced
 		this,
 		&APropHuntPlayerController::JumpReceiveInput
 	);
+}
+
+void APropHuntPlayerController::QTEReceiveInput(const FInputActionValue& InputActionValue)
+{
+	float QTEValue = InputActionValue.Get<float>();
+
+	OnInputQTEAction.Broadcast(QTEValue);
+}
+
+void APropHuntPlayerController::BindQTEInputAction(UEnhancedInputComponent* EnhancedInputComponent)
+{
+	if (EnhancedInputComponent == nullptr) return;
+
+	if (QTEInputAction == nullptr) return;
+	
+	EnhancedInputComponent->BindAction(
+		QTEInputAction,
+		ETriggerEvent::Started,
+		this,
+		&APropHuntPlayerController::QTEReceiveInput
+	);
+}
+
+void APropHuntPlayerController::ChangeInputMappingContextToQTE()
+{
+	ULocalPlayer* LocalPlayer = GetLocalPlayer();
+
+	if (LocalPlayer == nullptr) return;
+
+	UEnhancedInputLocalPlayerSubsystem* InputSystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>();
+
+	if (InputSystem == nullptr) return;
+
+	if (InputMappingContext == nullptr) return;
+	if (QTEInputMappingContext == nullptr) return;
+
+	InputSystem->RemoveMappingContext(InputMappingContext);
+	
+	InputSystem->AddMappingContext(QTEInputMappingContext, 0);
+}
+
+void APropHuntPlayerController::ChangeInputMappingContextToDefault()
+{
+	ULocalPlayer* LocalPlayer = GetLocalPlayer();
+
+	if (LocalPlayer == nullptr) return;
+
+	UEnhancedInputLocalPlayerSubsystem* InputSystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>();
+
+	if (InputSystem == nullptr) return;
+
+	if (InputMappingContext == nullptr) return;
+	if (QTEInputMappingContext == nullptr) return;
+
+	InputSystem->RemoveMappingContext(QTEInputMappingContext);
+	
+	InputSystem->AddMappingContext(InputMappingContext, 0);
 }

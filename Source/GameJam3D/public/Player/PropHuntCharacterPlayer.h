@@ -108,6 +108,18 @@ private:
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetCharacterRandomMovement(bool IsRandom);
+	
+#pragma endregion
+
+
+#pragma region QTE Action
+
+	UFUNCTION()
+	void QTEAction(float QTEValue);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void QTEActionBlueprint(float QTEValue);
+
 
 #pragma endregion 
 };

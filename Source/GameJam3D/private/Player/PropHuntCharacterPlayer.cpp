@@ -53,6 +53,7 @@ void APropHuntCharacterPlayer::BindReceiveInputFromController() const
 	PropHuntPlayerController->OnInputLookAction.AddDynamic(this, &APropHuntCharacterPlayer::LookAction);
 	PropHuntPlayerController->OnInputCatchAction.AddDynamic(this, &APropHuntCharacterPlayer::CatchAction);
 	PropHuntPlayerController->OnInputJumpAction.AddDynamic(this, &APropHuntCharacterPlayer::JumpAction);
+	PropHuntPlayerController->OnInputQTEAction.AddDynamic(this, &APropHuntCharacterPlayer::QTEAction);
 	
 }
 
@@ -175,3 +176,7 @@ void APropHuntCharacterPlayer::SetCharacterRandomMovement(bool IsRandom)
 	}
 }
 
+void APropHuntCharacterPlayer::QTEAction(float QTEValue)
+{
+	QTEActionBlueprint(QTEValue);
+}
