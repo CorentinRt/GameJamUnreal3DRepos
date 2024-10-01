@@ -36,6 +36,7 @@ void APropHuntCharacterPlayer::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	HandleRandomMovement(DeltaTime);
+	HandleCatchCoolDown(DeltaTime);
 }
 
 // Called to bind functionality to input
@@ -86,7 +87,26 @@ void APropHuntCharacterPlayer::LookAction(FVector2D LookDir)
 
 void APropHuntCharacterPlayer::CatchAction(float CatchValue)
 {
-	CatchActionBlueprint(CatchValue);
+	if (CanCatch)
+	{
+		CanCatch = false;
+		CatchActionBlueprint(CatchValue);
+	}
+}
+
+void APropHuntCharacterPlayer::HandleCatchCoolDown(float DeltaTime)
+{
+	if (CanCatch) return;
+	
+	if (CurrentCatchCooldown <= 0.f)
+	{
+		CanCatch = true;
+		CurrentCatchCooldown = CatchCooldown;
+	}
+	else
+	{
+		CurrentCatchCooldown -= DeltaTime;
+	}
 }
 
 void APropHuntCharacterPlayer::JumpAction(float JumpValue)

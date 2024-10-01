@@ -59,6 +59,21 @@ private:
 	UFUNCTION()
 	void CatchAction(float CatchValue);
 
+	UPROPERTY(EditAnywhere)
+	float CatchForce = 10.f;
+	
+	UPROPERTY()
+	bool CanCatch = true;
+	
+	UPROPERTY(EditAnywhere)
+	float CatchCooldown = 1.5f;
+
+	UPROPERTY()
+	float CurrentCatchCooldown = 0.f;
+
+	UFUNCTION()
+	void HandleCatchCoolDown(float DeltaTime);
+	
 	
 	UFUNCTION()
 	void JumpAction(float JumpValue);
@@ -76,7 +91,7 @@ private:
 	FVector2D CurrentRandomMovementDir;
 
 	UPROPERTY(EditAnywhere)
-	float MaxRandomStrenght = 2.f;
+	float MaxRandomStrenght = 3.f;
 
 	UPROPERTY(EditAnywhere)
 	float TimeBeforeRandomDirChange = 0.3f;
