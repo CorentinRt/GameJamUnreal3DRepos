@@ -42,6 +42,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputAction> QTEInputAction;
 
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UInputAction> PauseInputAction;
+
 protected:
 	virtual void BeginPlay() override;
 	
@@ -55,11 +58,17 @@ public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInputLookAction, FVector2D, InputLookValue);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInputCatchAction, float, InputCatchValue);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInputJumpAction, float, InputJumpValue);
+	
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInputPauseAction, float, InputPauseValue);
+
+	
 
 	FOnInputMoveAction OnInputMoveAction;
 	FOnInputLookAction OnInputLookAction;
 	FOnInputCatchAction OnInputCatchAction;
 	FOnInputJumpAction OnInputJumpAction;
+
+	FOnInputPauseAction OnInputPauseAction;
 	
 private:
 #pragma region MoveInput
@@ -90,7 +99,7 @@ private:
 
 #pragma endregion
 
-
+#pragma region QTEInput(Obsolete)
 public:
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInputQTEAction, float, QTEValue);
@@ -107,5 +116,19 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ChangeInputMappingContextToDefault();
+#pragma endregion
+
+#pragma region Pause Action
+
+	void PauseReceiveInput(const FInputActionValue& InputActionValue);
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	void PauseReceiveInputBluePrint(float PauseValue);
+	
+	UFUNCTION()
+	void BindPauseInputAction(UEnhancedInputComponent* EnhancedInputComponent);
+	
+
+#pragma endregion
 	
 };

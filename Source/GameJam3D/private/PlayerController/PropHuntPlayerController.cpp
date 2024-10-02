@@ -43,6 +43,8 @@ void APropHuntPlayerController::SetupInputComponent()
 	BindJumpAction(EnhancedInputComponent);
 
 	BindQTEInputAction(EnhancedInputComponent);
+
+	BindPauseInputAction(EnhancedInputComponent);
 }
 
 void APropHuntPlayerController::MoveReceiveInput(const FInputActionValue& InputActionValue)
@@ -208,4 +210,27 @@ void APropHuntPlayerController::ChangeInputMappingContextToDefault()
 	InputSystem->RemoveMappingContext(QTEInputMappingContext);
 	
 	InputSystem->AddMappingContext(InputMappingContext, 0);
+}
+
+void APropHuntPlayerController::PauseReceiveInput(const FInputActionValue& InputActionValue)
+{
+	float PauseValue = InputActionValue.Get<float>();
+	
+	OnInputPauseAction.Broadcast(PauseValue);
+
+	PauseReceiveInputBluePrint(PauseValue);
+}
+
+void APropHuntPlayerController::BindPauseInputAction(UEnhancedInputComponent* EnhancedInputComponent)
+{
+	if (EnhancedInputComponent == nullptr) return;
+
+	if (PauseInputAction == nullptr) return;
+	
+	EnhancedInputComponent->BindAction(
+		PauseInputAction,
+		ETriggerEvent::Started,
+		this,
+		&APropHuntPlayerController::PauseReceiveInput
+	);
 }
