@@ -113,12 +113,23 @@ private:
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetCharacterRandomMovement(bool IsRandom);
+
+	UFUNCTION()
+	void HandleCameraRandomEffect(float DeltaTime);
+
+private:
+	UPROPERTY()
+	float CameraAngleEffectSpeed;
+
+	UPROPERTY()
+	float MaxCameraAngleEffect;
 	
 #pragma endregion
 
 
 #pragma region QTE Action
 
+public:
 	UFUNCTION()
 	void QTEAction(float QTEValue);
 

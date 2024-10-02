@@ -76,6 +76,8 @@ void APropHuntCharacterPlayer::SetupParameters()
 	// RandomMoveParameters Setup
 	MaxRandomMoveStrenght = PropHuntCharacterDataAsset->MaxRandomMoveStrenght;
 	TimeBeforeRandomDirChange = PropHuntCharacterDataAsset->TimeBeforeRandomDirChange;
+	MaxCameraAngleEffect = PropHuntCharacterDataAsset->MaxCameraAngleEffect;
+	CameraAngleEffectSpeed = PropHuntCharacterDataAsset->CameraAngleEffectSpeed;
 	
 }
 
@@ -137,6 +139,8 @@ void APropHuntCharacterPlayer::JumpAction(float JumpValue)
 
 void APropHuntCharacterPlayer::HandleRandomMovement(float DeltaTime)
 {
+	HandleCameraRandomEffect(DeltaTime);
+	
 	if (IsMovingRandomly == false) return;
 	
 	if (CurrentTimeBeforeChange <= 0.f)
@@ -191,6 +195,26 @@ void APropHuntCharacterPlayer::SetCharacterRandomMovement(bool IsRandom)
 
 		CurrentTimeBeforeChange = 0.f;
 	}
+}
+
+void APropHuntCharacterPlayer::HandleCameraRandomEffect(float DeltaTime)
+{
+	if (CameraComponent == nullptr) return;
+	
+	FRotator CurrentCameraRotation = CameraComponent->GetRelativeRotation();
+	if (!IsMovingRandomly)
+	{
+		CurrentCameraRotation.Roll = FMath::FInterpTo(CurrentCameraRotation.Roll, 0.f, DeltaTime, 1.f);
+	}
+	else
+	{
+		float TargetRoll = CurrentCameraRotation.Roll + FMath::Sign(CurrentRandomMovementDir.X) * DeltaTime * 100.f;
+
+		TargetRoll = FMath::Clamp(TargetRoll, -MaxCameraAngleEffect, MaxCameraAngleEffect);
+		
+		CurrentCameraRotation.Roll = FMath::FInterpTo(CurrentCameraRotation.Roll, TargetRoll, DeltaTime, CameraAngleEffectSpeed);
+	}
+	CameraComponent->SetRelativeRotation(CurrentCameraRotation);
 }
 
 void APropHuntCharacterPlayer::QTEAction(float QTEValue)

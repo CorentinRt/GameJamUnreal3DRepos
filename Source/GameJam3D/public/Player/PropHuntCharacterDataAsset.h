@@ -33,5 +33,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Random move parameters")
 	float TimeBeforeRandomDirChange;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Random move parameters")
+	float MaxCameraAngleEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Random move parameters")
+	float CameraAngleEffectSpeed;
 };
