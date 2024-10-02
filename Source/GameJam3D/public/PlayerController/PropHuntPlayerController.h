@@ -45,6 +45,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputAction> PauseInputAction;
 
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UInputAction> CrouchInputAction;
+
 protected:
 	virtual void BeginPlay() override;
 	
@@ -58,6 +62,9 @@ public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInputLookAction, FVector2D, InputLookValue);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInputCatchAction, float, InputCatchValue);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInputJumpAction, float, InputJumpValue);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInputCrouchAction, float, InputCrouchValue);
+
+
 	
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInputPauseAction, float, InputPauseValue);
 
@@ -67,7 +74,8 @@ public:
 	FOnInputLookAction OnInputLookAction;
 	FOnInputCatchAction OnInputCatchAction;
 	FOnInputJumpAction OnInputJumpAction;
-
+	FOnInputCrouchAction OnInputCrouchAction;
+	
 	FOnInputPauseAction OnInputPauseAction;
 	
 private:
@@ -130,5 +138,14 @@ public:
 	
 
 #pragma endregion
+
+#pragma region Crouch
+
+
+	void CrouchReceiveInput(const FInputActionValue& InputActionValue);
+	UFUNCTION()
+	void BindCrouchAction(UEnhancedInputComponent* EnhancedInputComponent);
+
+#pragma endregion 
 	
 };

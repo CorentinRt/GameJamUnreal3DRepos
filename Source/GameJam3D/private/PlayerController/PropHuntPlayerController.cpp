@@ -45,6 +45,8 @@ void APropHuntPlayerController::SetupInputComponent()
 	BindQTEInputAction(EnhancedInputComponent);
 
 	BindPauseInputAction(EnhancedInputComponent);
+
+	BindCrouchAction(EnhancedInputComponent);
 }
 
 void APropHuntPlayerController::MoveReceiveInput(const FInputActionValue& InputActionValue)
@@ -232,5 +234,32 @@ void APropHuntPlayerController::BindPauseInputAction(UEnhancedInputComponent* En
 		ETriggerEvent::Started,
 		this,
 		&APropHuntPlayerController::PauseReceiveInput
+	);
+}
+
+void APropHuntPlayerController::CrouchReceiveInput(const FInputActionValue& InputActionValue)
+{
+	float CrouchValue = InputActionValue.Get<float>();
+	OnInputCrouchAction.Broadcast(CrouchValue);
+}
+
+void APropHuntPlayerController::BindCrouchAction(UEnhancedInputComponent* EnhancedInputComponent)
+{
+	if (EnhancedInputComponent == nullptr) return;
+
+	if (CrouchInputAction == nullptr) return;
+	
+	EnhancedInputComponent->BindAction(
+		CrouchInputAction,
+		ETriggerEvent::Started,
+		this,
+		&APropHuntPlayerController::CrouchReceiveInput
+	);
+
+	EnhancedInputComponent->BindAction(
+		CrouchInputAction,
+		ETriggerEvent::Completed,
+		this,
+		&APropHuntPlayerController::CrouchReceiveInput
 	);
 }
