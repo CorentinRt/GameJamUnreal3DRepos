@@ -167,26 +167,12 @@ void APropHuntCharacterPlayer::HandleRandomMovement(float DeltaTime)
 	
 	CurrentRandomMovementDir.X = FMath::FInterpTo(CurrentRandomMovementDir.X, TargetRandomMovementDir.X, DeltaTime, 1.f);
 	CurrentRandomMovementDir.Y = FMath::FInterpTo(CurrentRandomMovementDir.Y, TargetRandomMovementDir.Y, DeltaTime, 1.f);
-
-	GEngine->AddOnScreenDebugMessage(
-				-1,
-				3.f,
-				FColor::Purple,
-				FString::Printf(TEXT("Player Movement: %f"), CurrentRandomMovementDir.X)
-			);
 	
 	GetCharacterMovement()->AddInputVector(FVector(CurrentRandomMovementDir.X, CurrentRandomMovementDir.Y, 0.f) * MaxRandomMoveStrenght);
 }
 
 void APropHuntCharacterPlayer::ChangeRandomDirection()
 {
-	GEngine->AddOnScreenDebugMessage(
-				-1,
-				3.f,
-				FColor::Red,
-				TEXT("ChangeRandomDirection")
-			);
-	
 	float XRandomTarget = FMath::FRandRange(-1.f , 1.f);
 	float YRandomTarget = FMath::FRandRange(-1.f , 1.f);
 
