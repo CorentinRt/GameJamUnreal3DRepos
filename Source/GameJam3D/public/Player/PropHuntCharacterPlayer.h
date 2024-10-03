@@ -21,6 +21,9 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<UCameraComponent> CameraComponent;
+
+	UPROPERTY(EditAnywhere)
+	float CameraHeight;
 	
 	
 protected:
