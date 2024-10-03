@@ -56,6 +56,7 @@ void APropHuntCharacterPlayer::BindReceiveInputFromController() const
 	PropHuntPlayerController->OnInputCatchAction.AddDynamic(this, &APropHuntCharacterPlayer::CatchAction);
 	PropHuntPlayerController->OnInputJumpAction.AddDynamic(this, &APropHuntCharacterPlayer::JumpAction);
 	PropHuntPlayerController->OnInputQTEAction.AddDynamic(this, &APropHuntCharacterPlayer::QTEAction);
+	PropHuntPlayerController->OnInputCrouchAction.AddDynamic(this, &APropHuntCharacterPlayer::CrouchAction);
 	
 }
 
@@ -97,12 +98,16 @@ void APropHuntCharacterPlayer::LookAction(FVector2D LookDir)
 	float YawValue = LookDir.X * DeltaTime * 100.f;
 	
 	AddActorLocalRotation(FRotator(0.f, YawValue, 0.f), true);
-
+	
 	if (CameraComponent == nullptr) return;
 
-	CameraComponent->AddLocalRotation(FRotator(PitchValue, 0.f, 0.f), true);
+	FRotator CurrentCameraRot = CameraComponent->GetRelativeRotation();
+
+	CurrentCameraRot.Pitch += PitchValue;
+
+	CurrentCameraRot.Pitch = FMath::Clamp(CurrentCameraRot.Pitch, -70.f, 70.f);
 	
-	FMath::Clamp(CameraComponent->GetRelativeRotation().Yaw, -70.f, 70.f);
+	CameraComponent->SetRelativeRotation(CurrentCameraRot, true);
 }
 
 void APropHuntCharacterPlayer::CatchAction(float CatchValue)
@@ -220,4 +225,18 @@ void APropHuntCharacterPlayer::HandleCameraRandomEffect(float DeltaTime)
 void APropHuntCharacterPlayer::QTEAction(float QTEValue)
 {
 	QTEActionBlueprint(QTEValue);
+}
+
+void APropHuntCharacterPlayer::CrouchAction(float CrouchValue)
+{
+	CrouchActionBluePrint(CrouchValue);
+	
+	if (CrouchValue > 0.f)
+	{
+		GetCharacterMovement()->Crouch();
+	}
+	else
+	{
+		GetCharacterMovement()->UnCrouch();
+	}
 }

@@ -126,7 +126,6 @@ private:
 	
 #pragma endregion
 
-
 #pragma region QTE Action
 
 public:
@@ -137,5 +136,19 @@ public:
 	void QTEActionBlueprint(float QTEValue);
 
 
-#pragma endregion 
+#pragma endregion
+
+
+#pragma region Crouch
+
+	UFUNCTION()
+	void CrouchAction(float CrouchValue);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void CrouchActionBluePrint(float CrouchValue);
+
+
+#pragma endregion
+
+	
 };
