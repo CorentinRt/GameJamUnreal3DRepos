@@ -19,13 +19,17 @@ APropHuntCharacterPlayer::APropHuntCharacterPlayer()
 
 	CameraComponent->SetupAttachment(RootComponent);
 
-	CameraComponent->SetRelativeLocation(FVector(0.f, 0.f, 30.f));
 }
 
 // Called when the game starts or when spawned
 void APropHuntCharacterPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (CameraComponent != nullptr)
+	{
+		CameraComponent->SetRelativeLocation(FVector(0.f, 0.f, CameraHeight));
+	}
 
 	SetPlayerController();
 
