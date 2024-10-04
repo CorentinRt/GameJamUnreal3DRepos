@@ -28,6 +28,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Catch parameters")
 	float CatchDurationBeforeFlee;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Catch parameters")
+	float MinCatchStrenght;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Catch parameters")
+	float MaxCatchStrenght;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Random move parameters")
 	float MaxRandomMoveStrenght;
 
@@ -39,4 +45,5 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Random move parameters")
 	float CameraAngleEffectSpeed;
+
 };
